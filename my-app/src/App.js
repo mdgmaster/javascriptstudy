@@ -26,14 +26,14 @@ const handleNumberChange = (event) => {
 }
 
 
-// Forms
+// Forms 
 
 const addPerson = (event) => {
     event.preventDefault()
     if(!checkValue(newName)) {
         const newPerson = {name: newName, number: newNumber}
         setPersons(persons.concat(newPerson))
-        
+
     }else{
         window.alert(`ERROR: El nombre ${newName} ya ha sido usado`);
     }
