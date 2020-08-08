@@ -1,54 +1,79 @@
 import React, { useState } from 'react'
-import Note from './components/Note'
 
-const App = (props) => {
-  const [notes, setNotes] = useState(props.notes)
-  const [newNote, setNewNote] = useState('')
-  const [showAll, setShowAll] = useState(true)
+const App = () => {
+    const [persons, setPersons] = useState([
+        { name: 'Arto Hellas', number: '040-123456' },
+        { name: 'Ada Lovelace', number: '39-44-5323523' },
+        { name: 'Dan Abramov', number: '12-43-234345' },
+        { name: 'Mary Poppendieck', number: '39-23-6423122' }
+      ])
+const [ newName, setNewName ] = useState('')
+const [ newNumber, setNewNumber ] = useState('')
+const [ filterPerson, setNewFilter ] = useState(persons)
+// handlers
 
 
-  const notesToShow = showAll 
-    ? notes // si es True 
-    : notes.filter(note => note.important === true) // si es False
-
-  const addNote = (event) =>{
-      event.preventDefault() // Sirve para evitar que se envíe el formulario.
-      const noteObject = {
-          content: newNote,
-          date: new Date().toISOString(),
-          important: Math.random() < 0.5,
-          id: notes.length + 1
-      }
-
-      setNotes(notes.concat(noteObject)) // Empleamos concat porque no queremos modificar directamente el valor de State
-      setNewNote('')
-
-  }
-
-  const handleNoteChange = (event) => {
-      console.log("valor",event.target.value)
-    setNewNote(event.target.value)
-  }
-
-  return (
-    <div>
-      <h1>Notes</h1>
-      <div>
-          <button onClick={()=>setShowAll(!showAll)}>
-              show {showAll ? "All" : "Important"}
-          </button>
-      </div>
-      <ul>
-        {notesToShow.map(note => 
-          <Note key={note.id} note={note} />
-        )}
-      </ul>
-      <form onSubmit={addNote}>
-          <input value={newNote} onChange={handleNoteChange}/>
-          <button type="submtit">save</button>
-      </form>
-    </div>
-  )
+const handleFilter = (event) => {
+    setNewFilter(persons.filter(person => person.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1))
 }
 
-export default App 
+const handleOnChange = (event) => {
+    setNewName(event.target.value)
+}
+
+const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
+}
+
+
+// Forms
+
+const addPerson = (event) => {
+    event.preventDefault()
+    if(!checkValue(newName)) {
+        const newPerson = {name: newName, number: newNumber}
+        setPersons(persons.concat(newPerson))
+        
+    }else{
+        window.alert(`ERROR: El nombre ${newName} ya ha sido usado`);
+    }
+        
+        setNewName('')
+        setNewNumber('')
+    
+}
+
+// Functions 
+
+const checkValue = (value) =>{
+    let result = false
+    persons.forEach((item)=> item.name === value ? result = true : result = false)
+    return result 
+}
+
+return (
+    <div>
+    <h2>Phonebook</h2>
+            filter shown with: <input onChange={handleFilter} />
+
+    <h2>Add new</h2>
+    <form onSubmit={addPerson}>
+        <div>
+            name: <input value={newName} onChange={handleOnChange}/>
+        </div>
+        <div>
+            number: <input value={newNumber} onChange={handleNumberChange} /> 
+        </div>
+        <div>
+            <button type="submit">add</button>
+        </div>
+    </form>
+    <h2>Numbers</h2>
+    <ul>
+        {filterPerson.map(person=><li key={person.name}>{person.name} {person.number}</li>)}
+    </ul>
+    </div>
+)
+}
+
+export default App
