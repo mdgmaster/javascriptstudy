@@ -1,14 +1,14 @@
 import ReactDOM from 'react-dom'
 import React from 'react'
 // import Country from './Country'
-import App from './App'
+import AppNotes from './AppNotes'
 import './index.css'
 
 //import axios from 'axios'
 
 
 
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<AppNotes />, document.getElementById('root'))
 
 // axios
 // .get('http://localhost:3001/notes')
